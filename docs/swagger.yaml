@@ -1,0 +1,173 @@
+basePath: /api
+definitions:
+  user.User:
+    properties:
+      bio:
+        type: string
+      email:
+        type: string
+      image:
+        type: string
+      token:
+        type: string
+      username:
+        type: string
+    type: object
+  user.userResponse:
+    properties:
+      user:
+        $ref: '#/definitions/user.User'
+    type: object
+  utils.Error:
+    properties:
+      errors:
+        additionalProperties: true
+        type: object
+    type: object
+host: 127.0.0.1:1323
+info:
+  contact: {}
+  description: jhpark API
+  title: jhpark API
+  version: "1.0"
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: '[Description] Register a new user'
+      operationId: save-user
+      parameters:
+      - description: User info for registration
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.userResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.userResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Error'
+      summary: '[Summary] Register a new user'
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: '[Description] update the user'
+      operationId: update-user
+      parameters:
+      - description: name search
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.userResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: '[Summary] update the user'
+      tags:
+      - user
+  /user/:id:
+    delete:
+      consumes:
+      - application/json
+      description: '[Description] delete the user'
+      operationId: delete-user
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.userResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: '[Summary] delete the user'
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: '[Description] Get the user by ID'
+      operationId: get-user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.userResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: '[Summary] Get the user by ID'
+      tags:
+      - user
+produces:
+- application/json
+schemes:
+- http
+- https
+swagger: "2.0"
