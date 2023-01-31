@@ -3,6 +3,8 @@ package userdb
 import (
 	"fmt"
 	"time"
+
+	"golang.org/x/exp/maps"
 )
 
 type memdbHandler struct {
@@ -59,4 +61,9 @@ func (h *memdbHandler) DeleteUser(id int) error {
 	}
 
 	return fmt.Errorf("user[id:%d] not found.\n", id)
+}
+
+func (h *memdbHandler) DeleteAllUsers() error {
+	maps.Clear(h.users)
+	return nil
 }

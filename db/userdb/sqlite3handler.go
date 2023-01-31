@@ -70,3 +70,7 @@ func (h *sqlite3Handler) UpdateUser(u *User) error {
 func (h *sqlite3Handler) DeleteUser(id int) error {
 	return h.db.Table("users").Delete(&User{}, id).Error
 }
+
+func (h *sqlite3Handler) DeleteAllUsers() error {
+	return h.db.Exec("DELETE FROM users").Error
+}

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"jhpark/echo-guide-test/db/userdb"
 	"jhpark/echo-guide-test/utils"
 	"net/http"
 	"strconv"
@@ -26,9 +27,17 @@ func (h *Handler) saveUser(c echo.Context) error {
 	name := c.FormValue("username")
 	email := c.FormValue("email")
 
-	u := &userResponse{
+	user := &userdb.User{
 		Username: name,
 		Email:    email,
+	}
+	err := h.db.CreateUser(user)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
+	}
+	u := &userResponse{
+		Username: user.Username,
+		Email:    user.Email,
 	}
 
 	// for i := 0; i < 10; i++ {
@@ -63,21 +72,13 @@ func (h *Handler) getUser(c echo.Context) error {
 
 	u := new(userResponse)
 
-	if id > 10 {
-		u.Username = "jhpark10over"
-		u.Email = "jhpark10over@sinsiway.com"
-	} else if id == 10 {
-		u.Username = "jhpark10_"
-		u.Email = "jhpark10_@sinsiway.com"
-	} else {
-		user, err := h.db.GetUserByID(id)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, utils.NewError(err))
-		}
-
-		u.Username = user.Username
-		u.Email = user.Email
+	user, err := h.db.GetUserByID(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
 	}
+
+	u.Username = user.Username
+	u.Email = user.Email
 
 	return c.JSON(http.StatusOK, u)
 }
