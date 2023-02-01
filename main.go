@@ -3,6 +3,7 @@ package main
 import (
 	"jhpark/echo-guide-test/db/userdb"
 	"jhpark/echo-guide-test/router"
+	"jhpark/echo-guide-test/router/middleware"
 	"jhpark/echo-guide-test/user"
 	"net/http"
 
@@ -28,7 +29,11 @@ func main() {
 	r := router.New()
 
 	r.GET("/swagger/*", echoSwagger.WrapHandler)
-	v1 := r.Group("/api")
+
+	rs := middleware.NewRequestStat()
+	r.GET("/stats", rs.Stats)
+
+	v1 := r.Group("/api", rs.Process)
 
 	ud := userdb.NewDBHandler()
 	defer ud.Close()
